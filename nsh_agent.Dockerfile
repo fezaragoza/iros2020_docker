@@ -1,6 +1,9 @@
 # Base image
 FROM ros:melodic-robot-bionic
 
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES all
+
 # Update apt repo and pip2, and install python3, pip3
 RUN apt-get update --fix-missing && \
     apt-get upgrade -y && \
@@ -14,7 +17,12 @@ RUN apt-get install -y git \
                        cmake \
                        vim \
                        ros-melodic-ackermann-msgs \
-                       ros-melodic-genpy
+                       ros-melodic-genpy \
+                       ros-melodic-map-server \
+                       ros-melodic-rviz \
+                       ros-melodic-rqt \
+                       ros-melodic-rqt-common-plugins \
+                       ros-melodic-rqt-robot-plugins
 
 # Upgrade pip
 RUN pip install --upgrade pip
@@ -33,11 +41,12 @@ RUN mkdir -p /catkin_ws/src
 # Clone or copy over your source code
 
 # Copying
-# COPY ./your_package /catkin_ws/src/
+# COPY ./f1tenth_gym_ros /catkin_ws/src/
+COPY ./nsh_iros2020 /catkin_ws/src/
 
 # Cloning
-RUN cd /catkin_ws/src/ && \
-    git clone https://github.com/fezaragoza/nsh_iros2020.gits
+# RUN cd /catkin_ws/src/ && \
+#     git clone https://github.com/fezaragoza/nsh_iros2020.git
 
 # Building your ROS packages
 RUN /bin/bash -c "source /opt/ros/melodic/setup.bash; cd /catkin_ws; catkin_make; source devel/setup.bash"

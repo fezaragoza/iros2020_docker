@@ -13,9 +13,9 @@ services:
     environment:
       # env variables for the sim container
       # Scenario: 0 for single car timed trial (qualifying), 1 for dual car racing (grand prix)
-      - RACE_SCENARIO=1
+      - RACE_SCENARIO=0
       # ids for agents: EGO_ID is for YOUR agents in both qualifying AND grand prix. You'll need to assign your team's agent id to this when you submit.
-      - EGO_ID=ego_id
+      - EGO_ID=ego_nshmx
       # OPP_ID is ONLY for auto evaluation purposes, you DO NOT need to use the opp_id in your code
       - OPP_ID=opp_id
       # map parameters, RACE_MAP_PATH for the corresponding yaml path, RACE_MAP_IMG_EXT is the extension of the image file in ROS convention, i.e. assuming the image file and the yaml file are in the same directory and has the same filename except for the file extension
@@ -40,6 +40,10 @@ services:
       dockerfile: nsh_agent.Dockerfile
     stdin_open: true
     network_mode: "host"
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
 
   # agent2:
   #   container_name: agent2
